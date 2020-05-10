@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Graphs_1
 {
-    public class Node<T> : Base
+    public class Node<T>
     {
-        private static int _counter = 0;
+        private static int _counter = 1;
 
         private T _value;
         private Stack<Node<T>> _incedentEdges;
@@ -26,12 +26,6 @@ namespace Graphs_1
             set => SetValue(ref _incedentEdges, value);
         }
 
-        public Node()
-        {
-            Number = _counter++;
-            _incedentEdges = new Stack<Node<T>>();
-        }
-
         public Node(Graph<T> ParentGraph)
         {
             _parentGraph = ParentGraph;
@@ -41,7 +35,7 @@ namespace Graphs_1
             _incedentEdges = new Stack<Node<T>>();
         }
 
-        public void ConnectNode(Node<T> node)
+        public void ConnectNode(Node<T>? node)
         {
             if (node == null || IsConnected(node) || this == node)
                 return;
@@ -62,10 +56,6 @@ namespace Graphs_1
 
         public bool HasConnections() => _incedentEdges.Count > 0;
 
-        public override bool Equals(object obj) => (this.Number == (obj as Node<T>).Number);
-
-        public override string ToString() => $"Number: {Number}\tValue: {Value}";
-
         private bool IsConnected(Node<T> node)
         {
             foreach (var n in _incedentEdges)
@@ -74,5 +64,18 @@ namespace Graphs_1
 
             return false;
         }
+
+        protected bool SetValue<T>(ref T target, T value)
+        {
+            if (object.Equals(target, value))
+                return false;
+
+            target = value;
+            return true;
+        }
+
+        public override bool Equals(object obj) => (this.Number == (obj as Node<T>).Number);
+
+        public override string ToString() => $"Number: {Number}\tValue: {Value}";
     }
 }
